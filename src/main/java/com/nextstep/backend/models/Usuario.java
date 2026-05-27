@@ -40,6 +40,12 @@ public class Usuario implements UserDetails {
     @Column(name = "avatar", columnDefinition = "LONGTEXT")
     private String avatar;
 
+    @Column(name = "email_verified")
+    private boolean emailVerified = false;
+
+    @Column(name = "email_verification_token")
+    private String emailVerificationToken;
+
     public Usuario() {
     }
 
@@ -94,6 +100,22 @@ public class Usuario implements UserDetails {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public String getEmailVerificationToken() {
+        return emailVerificationToken;
+    }
+
+    public void setEmailVerificationToken(String emailVerificationToken) {
+        this.emailVerificationToken = emailVerificationToken;
     }
 
     @JsonIgnore

@@ -6,4 +6,6 @@ import com.nextstep.backend.dtos.TokenDTO;
 public interface AuthService {
     String registrar(AuthDTO data);
     TokenDTO login(AuthDTO data);
+    String verificarEmail(String token);
+    void reenviarVerificacao(String email);
 }
