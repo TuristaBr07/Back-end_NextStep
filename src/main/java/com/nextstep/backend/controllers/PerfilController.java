@@ -16,6 +16,8 @@ import com.nextstep.backend.dtos.PerfilResponseDTO;
 import com.nextstep.backend.models.Usuario;
 import com.nextstep.backend.services.PerfilService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/perfis" )
 public class PerfilController {
@@ -35,7 +37,7 @@ public class PerfilController {
     @PutMapping("/{idUsuario}")
     public ResponseEntity<List<PerfilResponseDTO>> updatePerfil(
             @PathVariable String idUsuario,
-            @RequestBody PerfilDTO dadosAtualizados
+            @Valid @RequestBody PerfilDTO dadosAtualizados
     ) {
         Usuario usuarioLogado = getUsuarioLogado();
         return ResponseEntity.ok(List.of(perfilService.atualizarPerfil(idUsuario, dadosAtualizados, usuarioLogado)));

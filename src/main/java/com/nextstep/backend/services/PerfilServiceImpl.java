@@ -19,6 +19,7 @@ public class PerfilServiceImpl implements PerfilService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PerfilResponseDTO buscarPerfil(String idUsuario, Usuario usuarioLogado) {
         validarAcesso(idUsuario, usuarioLogado);
 

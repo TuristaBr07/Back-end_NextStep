@@ -35,11 +35,32 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CategoriaResponseDTO> listarPorUsuario(String usuarioId) {
         return categoriaRepository.findByUsuarioIdOrderByNameAsc(usuarioId)
                 .stream()
                 .map(this::converterParaDTO)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public void deletar(Long id, Usuario usuario) {
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new RegraNegocioException("Categoria não encontrada."));
+
+        validarDonoDaCategoria(categoria, usuario);
+        categoriaRepository.delete(categoria);
+    }
+
+    private void validarDonoDaCategoria(Categoria categoria, Usuario usuario) {
+        if (usuario == null || usuario.getId() == null) {
+            throw new RegraNegocioException("Usuário não autenticado.");
+        }
+
+        if (categoria.getUsuario() == null || !usuario.getId().equals(categoria.getUsuario().getId())) {
+            throw new RegraNegocioException("Acesso negado.");
+        }
     }
 
     private void validar(CategoriaDTO dto) {

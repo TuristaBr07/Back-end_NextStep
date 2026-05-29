@@ -3,6 +3,7 @@ package com.nextstep.backend.controllers;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +21,8 @@ import com.nextstep.backend.dtos.TransacaoResponseDTO;
 import com.nextstep.backend.models.Usuario;
 import com.nextstep.backend.services.TransacaoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/transacoes" )
 public class TransacaoController {
@@ -31,9 +34,9 @@ public class TransacaoController {
     }
 
     @PostMapping
-    public ResponseEntity<TransacaoResponseDTO> criarTransacao(@RequestBody TransacaoDTO data) {
+    public ResponseEntity<TransacaoResponseDTO> criarTransacao(@Valid @RequestBody TransacaoDTO data) {
         Usuario usuarioLogado = getUsuarioLogado();
-        return ResponseEntity.ok(transacaoService.salvar(data, usuarioLogado));
+        return ResponseEntity.status(HttpStatus.CREATED).body(transacaoService.salvar(data, usuarioLogado));
     }
 
     @GetMapping
@@ -55,7 +58,7 @@ public class TransacaoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TransacaoResponseDTO> atualizarTransacao(@PathVariable Long id, @RequestBody TransacaoDTO data) {
+    public ResponseEntity<TransacaoResponseDTO> atualizarTransacao(@PathVariable Long id, @Valid @RequestBody TransacaoDTO data) {
         Usuario usuarioLogado = getUsuarioLogado();
         return ResponseEntity.ok(transacaoService.atualizar(id, data, usuarioLogado));
     }

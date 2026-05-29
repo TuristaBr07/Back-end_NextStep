@@ -5,16 +5,22 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "transacoes")
+@Table(name = "transacoes", indexes = {
+        @Index(name = "idx_tx_usuario", columnList = "usuario_id"),
+        @Index(name = "idx_tx_status", columnList = "status"),
+        @Index(name = "idx_tx_date", columnList = "date")
+})
 public class Transacao {
 
     @Id
@@ -24,14 +30,18 @@ public class Transacao {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime date;
 
+    @Column(length = 50, nullable = false)
     private String type;
 
+    @Column(length = 100, nullable = false)
     private String category;
 
+    @Column(length = 500)
     private String description;
 
     private Double amount;
 
+    @Column(length = 20)
     private String status;
 
     @ManyToOne

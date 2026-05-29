@@ -9,4 +9,5 @@ import com.nextstep.backend.models.Usuario;
 public interface CategoriaService {
     CategoriaResponseDTO salvar(CategoriaDTO dto, Usuario usuario);
     List<CategoriaResponseDTO> listarPorUsuario(String usuarioId);
+    void deletar(Long id, Usuario usuario);
 }

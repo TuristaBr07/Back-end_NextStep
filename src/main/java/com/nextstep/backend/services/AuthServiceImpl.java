@@ -1,10 +1,13 @@
 package com.nextstep.backend.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nextstep.backend.dtos.AuthDTO;
+import com.nextstep.backend.dtos.RecuperarSenhaDTO;
 import com.nextstep.backend.dtos.TokenDTO;
 import com.nextstep.backend.exceptions.RegraNegocioException;
 import com.nextstep.backend.models.Usuario;
@@ -12,6 +15,8 @@ import com.nextstep.backend.repositories.UsuarioRepository;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
@@ -44,14 +49,38 @@ public class AuthServiceImpl implements AuthService {
     public TokenDTO login(AuthDTO data) {
         validarCredenciais(data);
 
-        Usuario usuario = usuarioRepository.findByEmail(data.email().trim().toLowerCase());
+        String email = data.email().trim().toLowerCase();
+        Usuario usuario = usuarioRepository.findByEmail(email);
 
         if (usuario == null || !passwordEncoder.matches(data.senha(), usuario.getSenha())) {
+            logger.warn("Falha de login para o e-mail: {}", email);
             throw new RegraNegocioException("Email ou senha incorretos.");
         }
 
         String token = tokenService.gerarToken(usuario);
+        logger.info("Login realizado com sucesso para o usuário: {}", usuario.getId());
         return new TokenDTO(token, usuario.getId(), usuario.getEmail());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void recuperarSenha(RecuperarSenhaDTO data) {
+        if (data == null || data.email() == null || data.email().isBlank()) {
+            // Resposta genérica é tratada no controller; não revelamos detalhes.
+            return;
+        }
+
+        String email = data.email().trim().toLowerCase();
+        Usuario usuario = usuarioRepository.findByEmail(email);
+
+        if (usuario != null) {
+            // TODO: integrar envio de e-mail (SMTP) com token de redefinição de senha.
+            // Por enquanto apenas registramos no servidor; nunca expomos ao cliente
+            // se o e-mail existe ou não, para evitar enumeração de usuários.
+            logger.info("Solicitação de recuperação de senha para usuário existente: {}", usuario.getId());
+        } else {
+            logger.info("Solicitação de recuperação de senha para e-mail inexistente.");
+        }
     }
 
     private void validarCredenciais(AuthDTO data) {

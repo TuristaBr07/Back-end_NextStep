@@ -43,7 +43,8 @@ public class ChatbotServiceImpl implements ChatbotService {
                         iaNode.path("type").asText(),
                         iaNode.path("category").asText(),
                         iaNode.path("description").asText(),
-                        iaNode.path("amount").asDouble()
+                        iaNode.path("amount").asDouble(),
+                        iaNode.path("status").asText(null)
                 );
 
                 transacaoService.salvar(dto, usuario);

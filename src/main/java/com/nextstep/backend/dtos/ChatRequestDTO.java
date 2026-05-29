@@ -1,6 +1,9 @@
 package com.nextstep.backend.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class ChatRequestDTO {
+    @NotBlank
     private String message;
 
     public ChatRequestDTO() {

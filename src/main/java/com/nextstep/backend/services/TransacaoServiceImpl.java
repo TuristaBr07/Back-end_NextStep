@@ -40,6 +40,7 @@ public class TransacaoServiceImpl implements TransacaoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TransacaoResponseDTO> listarPorUsuario(String usuarioId) {
         return transacaoRepository.findByUsuarioIdOrderByDateDesc(usuarioId)
                 .stream()
@@ -48,6 +49,7 @@ public class TransacaoServiceImpl implements TransacaoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Map<String, Double> obterResumoFinanceiro(String usuarioId) {
         Double totalReceitas = transacaoRepository.sumReceitasByUsuarioId(usuarioId);
         Double totalDespesas = transacaoRepository.sumDespesasByUsuarioId(usuarioId);
@@ -71,6 +73,7 @@ public class TransacaoServiceImpl implements TransacaoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RelatorioCategoriaDTO> obterRelatorioPorCategoria(String usuarioId) {
         return transacaoRepository.findRelatorioByUsuarioId(usuarioId);
     }
@@ -100,6 +103,7 @@ public class TransacaoServiceImpl implements TransacaoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TransacaoResponseDTO> listarPendentes(String usuarioId) {
         return transacaoRepository.findByUsuarioIdAndStatusIgnoreCaseOrderByDateAsc(usuarioId, "PENDENTE")
                 .stream()

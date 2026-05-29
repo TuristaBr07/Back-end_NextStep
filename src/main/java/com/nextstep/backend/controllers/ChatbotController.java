@@ -12,6 +12,8 @@ import com.nextstep.backend.dtos.ChatResponseDTO;
 import com.nextstep.backend.models.Usuario;
 import com.nextstep.backend.services.ChatbotService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/chatbot" )
 public class ChatbotController {
@@ -23,7 +25,7 @@ public class ChatbotController {
     }
 
     @PostMapping
-    public ResponseEntity<ChatResponseDTO> conversar(@RequestBody ChatRequestDTO request) {
+    public ResponseEntity<ChatResponseDTO> conversar(@Valid @RequestBody ChatRequestDTO request) {
         Usuario usuarioLogado = getUsuarioLogado();
         return ResponseEntity.ok(chatbotService.conversar(request, usuarioLogado));
     }
