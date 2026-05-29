@@ -99,12 +99,21 @@ public class TransacaoServiceImpl implements TransacaoService {
         transacaoRepository.delete(transacao);
     }
 
+    @Override
+    public List<TransacaoResponseDTO> listarPendentes(String usuarioId) {
+        return transacaoRepository.findByUsuarioIdAndStatusIgnoreCaseOrderByDateAsc(usuarioId, "PENDENTE")
+                .stream()
+                .map(this::converterParaDTO)
+                .toList();
+    }
+
     private void preencherTransacao(Transacao transacao, TransacaoDTO dto) {
         transacao.setDate(converterData(dto.date()));
         transacao.setType(dto.type().trim());
         transacao.setCategory(dto.category().trim());
         transacao.setDescription(dto.description() != null ? dto.description().trim() : "");
         transacao.setAmount(dto.amount());
+        transacao.setStatus(dto.status() != null && !dto.status().isBlank() ? dto.status().toUpperCase() : "PAGO");
     }
 
     private void validar(TransacaoDTO dto) {
@@ -156,7 +165,8 @@ public class TransacaoServiceImpl implements TransacaoService {
                 transacao.getType(),
                 transacao.getCategory(),
                 transacao.getDescription(),
-                transacao.getAmount()
+                transacao.getAmount(),
+                transacao.getStatus() != null ? transacao.getStatus() : "PAGO"
         );
     }
 }

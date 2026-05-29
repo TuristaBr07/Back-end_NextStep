@@ -6,6 +6,7 @@ public record TransacaoResponseDTO(
         String type,
         String category,
         String description,
-        Double amount
+        Double amount,
+        String status
 ) {
 }

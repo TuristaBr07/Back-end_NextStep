@@ -32,6 +32,8 @@ public class Transacao {
 
     private Double amount;
 
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     @JsonIgnore
@@ -86,6 +88,14 @@ public class Transacao {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Usuario getUsuario() {

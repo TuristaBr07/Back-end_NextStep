@@ -67,6 +67,12 @@ public class TransacaoController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/pendentes")
+    public ResponseEntity<List<TransacaoResponseDTO>> listarPendentes() {
+        Usuario usuarioLogado = getUsuarioLogado();
+        return ResponseEntity.ok(transacaoService.listarPendentes(usuarioLogado.getId()));
+    }
+
     private Usuario getUsuarioLogado() {
         return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }

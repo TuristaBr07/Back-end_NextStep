@@ -15,4 +15,5 @@ public interface TransacaoService {
     List<RelatorioCategoriaDTO> obterRelatorioPorCategoria(String usuarioId);
     TransacaoResponseDTO atualizar(Long id, TransacaoDTO dto, Usuario usuario);
     void deletar(Long id, Usuario usuario);
+    List<TransacaoResponseDTO> listarPendentes(String usuarioId);
 }

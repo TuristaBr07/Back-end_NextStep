@@ -17,6 +17,8 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
     List<Transacao> findByUsuarioIdOrderByDateDesc(String usuarioId);
 
+    List<Transacao> findByUsuarioIdAndStatusIgnoreCaseOrderByDateAsc(String usuarioId, String status);
+
     @Query("SELECT COALESCE(SUM(t.amount), 0.0) FROM Transacao t WHERE t.usuario.id = :usuarioId AND (LOWER(t.type) = 'receita' OR LOWER(t.type) = 'income')")
     Double sumReceitasByUsuarioId(@Param("usuarioId") String usuarioId);
 
